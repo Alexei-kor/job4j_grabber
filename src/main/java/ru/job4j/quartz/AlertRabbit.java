@@ -26,8 +26,8 @@ public class AlertRabbit {
                     prop.getProperty("password"));
             try (Statement st = cn.createStatement()) {
                 String sql = "CREATE SCHEMA if not exists myschema;"
-                        + "create table if not exists myschema.rabbit(" +
-                        "created_date timestamp"
+                        + "create table if not exists myschema.rabbit("
+                        + "created_date timestamp"
                         + ");";
                 st.execute(sql);
                 Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
