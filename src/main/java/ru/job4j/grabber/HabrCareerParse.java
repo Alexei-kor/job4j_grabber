@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class HabrCareerParse {
@@ -32,14 +33,9 @@ public class HabrCareerParse {
             Element dateEl = row.select(".vacancy-card__date").first();
             Element time = dateEl.child(0);
             String dateStr = time.attr("dateTime");
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
-            Date date = new Date();
-            try {
-                date = formatter.parse(dateStr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            System.out.printf("%s %tY.%tm.%td %s%n", vacancyName, date, date, date, link);
+            DateTimeParser dtParser = new HarbCareerDateTimeParser();
+            LocalDateTime lDT = dtParser.parse(dateStr);
+            System.out.printf("%s %s %s%n", vacancyName, lDT.format(DateTimeFormatter.ISO_DATE), link);
         });
 
     }
