@@ -20,33 +20,28 @@ public class AlertRabbit {
     public static void main(String[] args) {
         try (InputStream is = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
             Properties prop = loadProperties();
-            Connection cn = DriverManager.getConnection(
+            try (Connection cn = DriverManager.getConnection(
                     prop.getProperty("url"),
                     prop.getProperty("username"),
-                    prop.getProperty("password"));
-            try (Statement st = cn.createStatement()) {
-                String sql = "CREATE SCHEMA if not exists myschema;"
-                        + "create table if not exists myschema.rabbit("
-                        + "created_date timestamp"
-                        + ");";
-                st.execute(sql);
-                Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-                scheduler.start();
-                JobDataMap data = new JobDataMap();
-                data.put("connect", cn);
-                JobDetail job = JobBuilder.newJob(Rabbit.class)
-                        .usingJobData(data)
-                        .build();
-                SimpleScheduleBuilder times = SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(5)
-                        .repeatForever();
-                Trigger trigger = TriggerBuilder.newTrigger()
-                        .startNow()
-                        .withSchedule(times)
-                        .build();
-                scheduler.scheduleJob(job, trigger);
-                Thread.sleep(10000);
-                scheduler.shutdown();
+                    prop.getProperty("password"))) {
+                    Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+                    scheduler.start();
+                    JobDataMap data = new JobDataMap();
+                    data.put("connect", cn);
+                    JobDetail job = JobBuilder.newJob(Rabbit.class)
+                            .usingJobData(data)
+                            .build();
+                    SimpleScheduleBuilder times = SimpleScheduleBuilder.simpleSchedule()
+                            .withIntervalInSeconds(Integer.parseInt(prop.getProperty("rabbit.interval")))
+                            .repeatForever();
+                    Trigger trigger = TriggerBuilder.newTrigger()
+                            .startNow()
+                            .withSchedule(times)
+                            .build();
+                    scheduler.scheduleJob(job, trigger);
+                    Thread.sleep(10000);
+                    scheduler.shutdown();
+
             }
         } catch (Exception se) {
             LOG.error("error start sheduler", se);
@@ -59,11 +54,18 @@ public class AlertRabbit {
         public void execute(JobExecutionContext context) {
             System.out.println("Rabbit runs here ...");
             Connection cn = (Connection) context.getJobDetail().getJobDataMap().get("connect");
-            try (PreparedStatement prSt = cn.prepareStatement("insert into myschema.rabbit(created_date) values(?)")) {
-                prSt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
-                prSt.execute();
+            try (Statement st = cn.createStatement()) {
+                String sql = "CREATE SCHEMA if not exists myschema;"
+                        + "create table if not exists myschema.rabbit("
+                        + "created_date timestamp"
+                        + ");";
+                st.execute(sql);
+                try (PreparedStatement prSt = cn.prepareStatement("insert into myschema.rabbit(created_date) values(?)")) {
+                    prSt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+                    prSt.execute();
+                }
             } catch (SQLException e) {
-                LOG.error("error adding record in table", e);
+                LOG.error("error executing request", e);
             }
         }
     }
