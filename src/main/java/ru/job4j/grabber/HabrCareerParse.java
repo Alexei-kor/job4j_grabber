@@ -35,7 +35,7 @@ public class HabrCareerParse {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
             Date date = new Date();
             try {
-                date = (Date) formatter.parse(dateStr);
+                date = formatter.parse(dateStr);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
