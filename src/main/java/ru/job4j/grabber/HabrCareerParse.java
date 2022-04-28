@@ -20,12 +20,12 @@ public class HabrCareerParse {
 
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
 
+    private static final int PAGES = 5;
+
     private static List<String> data = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
-        Properties prop = loadProperties();
-        int pages = Integer.parseInt(prop.getProperty("countPages"));
-        for (int i = 1; i <= pages; i++) {
+        for (int i = 1; i <= PAGES; i++) {
             String link = String.format("%s?page=%s", PAGE_LINK, i);
             Connection connection = Jsoup.connect(link);
             readPage(connection.get());
@@ -38,12 +38,12 @@ public class HabrCareerParse {
         rows.forEach(row -> {
             Element titleElement = row.select(".vacancy-card__title").first();
             Element linkElement = titleElement.child(0);
-            String vacancyName = titleElement.text();
-            String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
+            String vacancyName = getTextElement(titleElement);
+            String link = String.format("%s%s", SOURCE_LINK, getAttrElement(linkElement, "href"));
 
             Element dateEl = row.select(".vacancy-card__date").first();
             Element time = dateEl.child(0);
-            String dateStr = time.attr("dateTime");
+            String dateStr = getAttrElement(time, "dateTime");
             DateTimeParser dtParser = new HarbCareerDateTimeParser();
             LocalDateTime lDT = dtParser.parse(dateStr);
             data.add(String.format("%s %s %s",
@@ -54,15 +54,12 @@ public class HabrCareerParse {
         });
     }
 
-    public static Properties loadProperties() {
-        Properties properties = new Properties();
-        try (InputStream inputStream = AlertRabbit.class
-                .getClassLoader()
-                .getResourceAsStream("careerParser.properties")) {
-            properties.load(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return properties;
+    private static String getTextElement(Element element) {
+        return element.text();
     }
+
+    private static String getAttrElement(Element element, String attr) {
+        return element.attr(attr);
+    }
+
 }
