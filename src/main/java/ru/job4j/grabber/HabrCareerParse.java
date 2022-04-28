@@ -15,7 +15,7 @@ public class HabrCareerParse implements Parse {
 
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
 
-    private static final DateTimeParser dateTimeParser = new HarbCareerDateTimeParser();
+    private static final DateTimeParser DATE_TIME_PARSER = new HarbCareerDateTimeParser();
 
     @Override
     public List<Post> list(String link) {
@@ -50,7 +50,7 @@ public class HabrCareerParse implements Parse {
                     vacancyName,
                     link,
                     retrieveDescription(link),
-                    dateTimeParser.parse(dateStr)));
+                    DATE_TIME_PARSER.parse(dateStr)));
 
         });
         return data;
