@@ -20,14 +20,14 @@ public class HabrCareerParse {
 
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
 
-    private static final int PAGES = 5;
+    private static final int PAGES = 1;
 
-    private static List<String> data = new ArrayList<>();
+    private static List<Post> data = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         for (int i = 1; i <= PAGES; i++) {
             String link = String.format("%s?page=%s", PAGE_LINK, i);
-            Connection connection = Jsoup.connect(link);
+            Connection connection = getConnnect(link);
             readPage(connection.get());
         }
         data.forEach(System.out::println);
@@ -44,14 +44,32 @@ public class HabrCareerParse {
             Element dateEl = row.select(".vacancy-card__date").first();
             Element time = dateEl.child(0);
             String dateStr = getAttrElement(time, "dateTime");
-            DateTimeParser dtParser = new HarbCareerDateTimeParser();
-            LocalDateTime lDT = dtParser.parse(dateStr);
-            data.add(String.format("%s %s %s",
+            data.add(new Post(
                     vacancyName,
-                    lDT.format(DateTimeFormatter.ISO_DATE),
-                    link)
-            );
+                    link,
+                    retrieveDescription(link),
+                    new HarbCareerDateTimeParser().parse(dateStr)));
         });
+    }
+
+    private static String retrieveDescription(String link) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Connection connection = getConnnect(link);
+        try {
+            Document document = connection.get();
+            Element el = document.select(".job_show_description__vacancy_description").first();
+            el.child(0).children().forEach(row -> {
+                stringBuilder.append(row.text());
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    private static Connection getConnnect(String link) {
+        return Jsoup.connect(link);
     }
 
     private static String getTextElement(Element element) {

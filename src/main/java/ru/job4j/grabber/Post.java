@@ -1,6 +1,7 @@
 package ru.job4j.grabber;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Post {
@@ -88,7 +89,7 @@ public class Post {
                 + "title='" + title + '\''
                 + ", link='" + link + '\''
                 + ", description='" + description + '\''
-                + ", created=" + created
+                + ", created=" + created.format(DateTimeFormatter.ISO_DATE)
                 + '}';
     }
 }
