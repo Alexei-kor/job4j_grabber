@@ -5,36 +5,38 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import ru.job4j.quartz.AlertRabbit;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-public class HabrCareerParse {
+public class HabrCareerParse implements Parse {
     private static final String SOURCE_LINK = "https://career.habr.com";
 
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
 
-    private static final int PAGES = 1;
+    private static final DateTimeParser dateTimeParser = new HarbCareerDateTimeParser();
 
-    private static List<Post> data = new ArrayList<>();
-
-    public static void main(String[] args) throws IOException {
-        for (int i = 1; i <= PAGES; i++) {
-            String link = String.format("%s?page=%s", PAGE_LINK, i);
+    @Override
+    public List<Post> list(String link) {
+        List<Post> data = new ArrayList<>();
+        try {
             Connection connection = getConnnect(link);
-            readPage(connection.get());
+            data.addAll(readPage(connection.get()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        data.forEach(System.out::println);
+        return data;
     }
 
-    private static void readPage(Document document) {
+    public static void main(String[] args) {
+        HabrCareerParse hcp = new HabrCareerParse();
+        hcp.list(PAGE_LINK).forEach(System.out::println);
+    }
+
+    private static List<Post> readPage(Document document) {
         Elements rows = document.select(".vacancy-card__inner");
+        List<Post> data = new ArrayList<>();
         rows.forEach(row -> {
             Element titleElement = row.select(".vacancy-card__title").first();
             Element linkElement = titleElement.child(0);
@@ -48,8 +50,10 @@ public class HabrCareerParse {
                     vacancyName,
                     link,
                     retrieveDescription(link),
-                    new HarbCareerDateTimeParser().parse(dateStr)));
+                    dateTimeParser.parse(dateStr)));
+
         });
+        return data;
     }
 
     private static String retrieveDescription(String link) {
