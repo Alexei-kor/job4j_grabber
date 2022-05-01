@@ -15,14 +15,22 @@ public class HabrCareerParse implements Parse {
 
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
 
-    private static final DateTimeParser DATE_TIME_PARSER = new HarbCareerDateTimeParser();
+    private DateTimeParser dateTimeParser;
+
+    private static final int PAGES = 5;
+
+    public HabrCareerParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
 
     @Override
     public List<Post> list(String link) {
         List<Post> data = new ArrayList<>();
         try {
-            Connection connection = getConnnect(link);
-            data.addAll(readPage(connection.get()));
+            for (int i = 1; i <= PAGES; i++) {
+                Connection connection = getConnnect(String.format("%s?page=%s", link, i));
+                data.addAll(readPage(connection.get()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,18 +38,18 @@ public class HabrCareerParse implements Parse {
     }
 
     public static void main(String[] args) {
-        HabrCareerParse hcp = new HabrCareerParse();
+        HabrCareerParse hcp = new HabrCareerParse(new HarbCareerDateTimeParser());
         hcp.list(PAGE_LINK).forEach(System.out::println);
     }
 
-    private static List<Post> readPage(Document document) {
+    private List<Post> readPage(Document document) {
         Elements rows = document.select(".vacancy-card__inner");
         List<Post> data = new ArrayList<>();
         rows.forEach(row -> data.add(getPostFromSite(row)));
         return data;
     }
 
-    private static Post getPostFromSite(Element element) {
+    private Post getPostFromSite(Element element) {
         Element titleElement = element.select(".vacancy-card__title").first();
         Element linkElement = titleElement.child(0);
         String vacancyName = getTextElement(titleElement);
@@ -54,10 +62,10 @@ public class HabrCareerParse implements Parse {
                 vacancyName,
                 link,
                 retrieveDescription(link),
-                DATE_TIME_PARSER.parse(dateStr));
+                dateTimeParser.parse(dateStr));
     }
 
-    private static String retrieveDescription(String link) {
+    private String retrieveDescription(String link) {
         String rsl = "";
         Connection connection = getConnnect(link);
         try {
@@ -69,15 +77,15 @@ public class HabrCareerParse implements Parse {
         return rsl;
     }
 
-    private static Connection getConnnect(String link) {
+    private Connection getConnnect(String link) {
         return Jsoup.connect(link);
     }
 
-    private static String getTextElement(Element element) {
+    private String getTextElement(Element element) {
         return element.text();
     }
 
-    private static String getAttrElement(Element element, String attr) {
+    private String getAttrElement(Element element, String attr) {
         return element.attr(attr);
     }
 
