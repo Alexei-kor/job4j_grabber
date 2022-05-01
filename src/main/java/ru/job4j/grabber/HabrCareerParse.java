@@ -58,19 +58,15 @@ public class HabrCareerParse implements Parse {
     }
 
     private static String retrieveDescription(String link) {
-        StringBuilder stringBuilder = new StringBuilder();
+        String rsl = "";
         Connection connection = getConnnect(link);
         try {
             Document document = connection.get();
-            Element el = document.select(".job_show_description__vacancy_description").first();
-            el.child(0).children().forEach(row -> {
-                stringBuilder.append(row.text());
-            });
-
+            rsl = document.select(".style-ugc").text();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return stringBuilder.toString();
+        return rsl;
     }
 
     private static Connection getConnnect(String link) {
