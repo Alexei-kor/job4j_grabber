@@ -37,23 +37,24 @@ public class HabrCareerParse implements Parse {
     private static List<Post> readPage(Document document) {
         Elements rows = document.select(".vacancy-card__inner");
         List<Post> data = new ArrayList<>();
-        rows.forEach(row -> {
-            Element titleElement = row.select(".vacancy-card__title").first();
-            Element linkElement = titleElement.child(0);
-            String vacancyName = getTextElement(titleElement);
-            String link = String.format("%s%s", SOURCE_LINK, getAttrElement(linkElement, "href"));
-
-            Element dateEl = row.select(".vacancy-card__date").first();
-            Element time = dateEl.child(0);
-            String dateStr = getAttrElement(time, "dateTime");
-            data.add(new Post(
-                    vacancyName,
-                    link,
-                    retrieveDescription(link),
-                    DATE_TIME_PARSER.parse(dateStr)));
-
-        });
+        rows.forEach(row -> data.add(getPostFromSite(row)));
         return data;
+    }
+
+    private static Post getPostFromSite(Element element) {
+        Element titleElement = element.select(".vacancy-card__title").first();
+        Element linkElement = titleElement.child(0);
+        String vacancyName = getTextElement(titleElement);
+        String link = String.format("%s%s", SOURCE_LINK, getAttrElement(linkElement, "href"));
+
+        Element dateEl = element.select(".vacancy-card__date").first();
+        Element time = dateEl.child(0);
+        String dateStr = getAttrElement(time, "dateTime");
+        return new Post(
+                vacancyName,
+                link,
+                retrieveDescription(link),
+                DATE_TIME_PARSER.parse(dateStr));
     }
 
     private static String retrieveDescription(String link) {
