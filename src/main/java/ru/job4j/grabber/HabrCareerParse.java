@@ -5,10 +5,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.quartz.AlertRabbit;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class HabrCareerParse implements Parse {
     private static final String SOURCE_LINK = "https://career.habr.com";
@@ -17,7 +20,7 @@ public class HabrCareerParse implements Parse {
 
     private DateTimeParser dateTimeParser;
 
-    private static final int PAGES = 5;
+    private static final int PAGES = 2;
 
     public HabrCareerParse(DateTimeParser dateTimeParser) {
         this.dateTimeParser = dateTimeParser;
@@ -38,8 +41,12 @@ public class HabrCareerParse implements Parse {
     }
 
     public static void main(String[] args) {
+        Properties prop = loadProperties();
         HabrCareerParse hcp = new HabrCareerParse(new HarbCareerDateTimeParser());
-        hcp.list(PAGE_LINK).forEach(System.out::println);
+        PsqlStore store = new PsqlStore(prop);
+        hcp.list(PAGE_LINK).forEach(row -> store.save(row));
+        System.out.println(store.findById(3));
+        store.getAll().forEach(System.out::println);
     }
 
     private List<Post> readPage(Document document) {
@@ -87,6 +94,18 @@ public class HabrCareerParse implements Parse {
 
     private String getAttrElement(Element element, String attr) {
         return element.attr(attr);
+    }
+
+    public static Properties loadProperties() {
+        Properties properties = new Properties();
+        try (InputStream inputStream = HabrCareerParse.class
+                .getClassLoader()
+                .getResourceAsStream("careerParser.properties")) {
+            properties.load(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return properties;
     }
 
 }
