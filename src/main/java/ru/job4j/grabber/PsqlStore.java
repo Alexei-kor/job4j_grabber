@@ -1,5 +1,6 @@
 package ru.job4j.grabber;
 
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,13 +48,7 @@ public class PsqlStore implements Store, AutoCloseable {
         try (Statement st = cnn.createStatement()) {
             ResultSet set = st.executeQuery(request);
             while (set.next()) {
-                rsl.add(new Post(
-                    set.getInt(1),
-                    set.getString(2),
-                    set.getString(3),
-                    set.getString(4),
-                    set.getTimestamp(5).toLocalDateTime()
-                ));
+                rsl.add(getPost(set));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,13 +64,7 @@ public class PsqlStore implements Store, AutoCloseable {
             prSt.setInt(1, id);
             ResultSet set = prSt.executeQuery();
             if (set.next()) {
-                rsl = new Post(
-                    set.getInt(1),
-                    set.getString(2),
-                    set.getString(3),
-                    set.getString(4),
-                    set.getTimestamp(5).toLocalDateTime()
-                );
+                rsl = getPost(set);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,5 +77,36 @@ public class PsqlStore implements Store, AutoCloseable {
         if (cnn != null) {
             cnn.close();
         }
+    }
+
+    private Post getPost(ResultSet set) throws SQLException {
+        return new Post(
+                set.getInt(1),
+                set.getString(2),
+                set.getString(3),
+                set.getString(4),
+                set.getTimestamp(5).toLocalDateTime()
+        );
+    }
+
+    public static void main(String[] args) {
+        Properties prop = loadProperties();
+        HabrCareerParse hcp = new HabrCareerParse(new HarbCareerDateTimeParser());
+        PsqlStore store = new PsqlStore(prop);
+        hcp.list("https://career.habr.com/vacancies/java_developer").forEach(store::save);
+        System.out.println(store.findById(15));
+        store.getAll().forEach(System.out::println);
+    }
+
+    public static Properties loadProperties() {
+        Properties properties = new Properties();
+        try (InputStream inputStream = PsqlStore.class
+                .getClassLoader()
+                .getResourceAsStream("careerParser.properties")) {
+            properties.load(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return properties;
     }
 }
