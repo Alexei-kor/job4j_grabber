@@ -63,25 +63,18 @@ where
 select 
 	company.name,
 	count(person.id) as count
-INTO countPersons
 from 
 	person 
 	join company 
 		on person.company_id = company.id
 group by
 	company.name
-;
-select 
-	max(count) as count
-INTO maxCountPersons
-from 
-	 countPersons
-;
-select
-	countPersons.name,
-	countPersons.count
-from
-	countpersons
-where
-	countpersons.count in (select 6);
-		
+having count(person.id) in (
+	select 
+		count(id) as count
+	from 
+		person 	
+	group by
+		company_id
+	order by count desc
+	limit 1)
