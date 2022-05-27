@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.*;
 @Ignore
 public class GeneratorTest {
 
+    @Ignore
     @Test
     public void whenOK() {
         String template = "I am a ${name}, Who are ${subject}?";
@@ -18,6 +19,7 @@ public class GeneratorTest {
         assertThat(new GeneratorOne().produce(template, map), is("I am a Ivanov, Who are you?"));
     }
 
+    @Ignore
     @Test (expected = IllegalArgumentException.class)
     public void whenMapIsNotKey() {
         String template = "I am a ${name}, Who are ${subject}?";
@@ -25,6 +27,7 @@ public class GeneratorTest {
         new GeneratorOne().produce(template, map);
     }
 
+    @Ignore
     @Test (expected = IllegalArgumentException.class)
     public void whenMapIsMoreKeys() {
         String template = "I am a ${name}, Who are ${subject}?";
