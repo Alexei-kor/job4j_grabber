@@ -34,8 +34,8 @@ public class CinemaTest {
     public void whenAdd() {
         Cinema cinema = new Cinema3D();
         cinema.add(new Session3D());
-        cinema.add(new Session4D());
-        assertThat(cinema.find(session -> true), new Session3D());
+        cinema.add(new Session3D());
+        assertThat(cinema.find(session -> true).size(), is(2));
     }
 
     @Test (expected = IllegalArgumentException.class)
