@@ -31,7 +31,7 @@ public class GeneratorTest {
     @Test (expected = IllegalArgumentException.class)
     public void whenMapIsMoreKeys() {
         String template = "I am a ${name}, Who are ${subject}?";
-        Map<String, String> map = Map.of("name", "Ivanov", "subject", "you", "city", "Rostov");
+        Map<String, String> map = Map.of("name", "Ivanov", "subject", "you", "Сity", "Rostov");
         new GeneratorOne().produce(template, map);
     }
 
