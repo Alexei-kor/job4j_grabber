@@ -1,12 +1,14 @@
 package ru.job4j.template;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+
+@Ignore
 public class GeneratorTest {
 
     @Test
