@@ -66,7 +66,7 @@ public class CinemaTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void whenBuyIncorrectColumn() {
+    public void whenBuyIncorrectTicket() {
         Account account = new AccountCinema();
         Cinema cinema = new Cinema3D();
         Calendar date = Calendar.getInstance();
