@@ -1,5 +1,6 @@
 package ru.job4j.tdd;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
+@Ignore
 public class CinemaTest {
 
     @Test
@@ -35,4 +37,42 @@ public class CinemaTest {
         cinema.add(new Session4D());
         assertThat(cinema.find(session -> true), new Session3D());
     }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void whenBuyIncorrectDate() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        date.set(2027, 10, 10, 23, 00);
+        Ticket ticket = cinema.buy(account, 1, 1, date);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void whenBuyIncorrectRow() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        date.set(2022, 10, 10, 23, 00);
+        Ticket ticket = cinema.buy(account, 150, 1, date);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void whenBuyIncorrectColumn() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        date.set(2022, 10, 10, 23, 00);
+        Ticket ticket = cinema.buy(account, 1, 1000, date);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void whenBuyIncorrectColumn() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        date.set(2022, 10, 10, 23, 00);
+        Ticket ticketOne = cinema.buy(account, 1, 1, date);
+        Ticket ticketTwo = cinema.buy(account, 1, 1, date);
+    }
+
 }
