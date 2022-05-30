@@ -1,4 +1,4 @@
-package ru.job4j.solidNegetiveTemplateThree;
+package ru.job4j.solidnegetivetemplatethree;
 
 public class PassengerCar {
 

@@ -1,4 +1,4 @@
-package ru.job4j.solidNegativeTemplateOne;
+package ru.job4j.solidnegativetemplateone;
 
 public interface Cars {
 
