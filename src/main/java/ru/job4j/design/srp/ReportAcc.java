@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 public class ReportAcc implements Report {
 
+    public static final int THSD = 1000;
     private Store store;
 
     public ReportAcc(Store store) {
@@ -18,7 +19,7 @@ public class ReportAcc implements Report {
             text.append(employee.getName()).append(";")
                     .append(employee.getHired()).append(";")
                     .append(employee.getFired()).append(";")
-                    .append(employee.getSalary() / 1000).append(";")
+                    .append(employee.getSalary() / THSD).append(";")
                     .append(System.lineSeparator());
         }
         return text.toString();
