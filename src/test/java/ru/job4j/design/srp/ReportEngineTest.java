@@ -39,9 +39,9 @@ public class ReportEngineTest {
         Report engine = new ReportAcc(store);
         StringBuilder expect = new StringBuilder();
         expect.append("Name; Hired; Fired; Salary (thousand)").append(System.lineSeparator());
-        expect.append("Ivan;").append(now).append(";").append(now).append(";").append(100 / ReportAcc.THSD).append(";").append(System.lineSeparator());
-        expect.append("Petr;").append(now).append(";").append(now).append(";").append(200 / ReportAcc.THSD).append(";").append(System.lineSeparator());
-        expect.append("Sidor;").append(now).append(";").append(now).append(";").append(300 / ReportAcc.THSD).append(";").append(System.lineSeparator());
+        expect.append("Ivan;").append(now).append(";").append(now).append(";").append(100d / ReportAcc.THSD).append(";").append(System.lineSeparator());
+        expect.append("Petr;").append(now).append(";").append(now).append(";").append(200d / ReportAcc.THSD).append(";").append(System.lineSeparator());
+        expect.append("Sidor;").append(now).append(";").append(now).append(";").append(300d / ReportAcc.THSD).append(";").append(System.lineSeparator());
         assertThat(engine.generate(em -> true), is(expect.toString()));
     }
 
