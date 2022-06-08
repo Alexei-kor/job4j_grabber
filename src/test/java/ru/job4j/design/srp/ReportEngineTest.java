@@ -1,5 +1,7 @@
 package ru.job4j.design.srp;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -95,6 +97,36 @@ public class ReportEngineTest {
                 .append(System.lineSeparator());
         expect.append("</table>");
         assertThat(engine.generate(em -> true), is(expect.toString()));
+    }
+
+    @Test
+    public void whenXMLGenerate() {
+        MemStore store = new MemStore();
+        Calendar now = Calendar.getInstance();
+        store.add(new Employee("Ivan", now, now, 100));
+        store.add(new Employee("Petr", now, now, 200));
+        store.add(new Employee("Sidor", now, now, 300));
+        Report engine = new ReportXML(store);
+        String extend = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employeesssss>\n"
+                + "    <Employee name=\"Ivan\" salary=\"100.0\"/>\n"
+                + "    <Employee name=\"Petr\" salary=\"200.0\"/>\n"
+                + "    <Employee name=\"Sidor\" salary=\"300.0\"/>\n"
+                + "</employeesssss>";
+        assertThat(engine.generate(e -> true), is(extend));
+    }
+
+    @Test
+    public void whenJSONGenerate() {
+        MemStore store = new MemStore();
+        Calendar now = Calendar.getInstance();
+        store.add(new Employee("Ivan", now, now, 100));
+        store.add(new Employee("Petr", now, now, 200));
+        store.add(new Employee("Sidor", now, now, 300));
+        Report engine = new ReportJSON(store);
+        String strNow = new GsonBuilder().create().toJson(now);
+        String extend = String.format("[{\"name\":\"Ivan\",\"hired\":%s,\"fired\":%s,\"salary\":100.0},{\"name\":\"Petr\",\"hired\":%s,\"fired\":%s,\"salary\":200.0},{\"name\":\"Sidor\",\"hired\":%s,\"fired\":%s,\"salary\":300.0}]", strNow, strNow, strNow, strNow, strNow, strNow);
+        assertThat(engine.generate(e -> true), is(extend));
     }
 
 }
