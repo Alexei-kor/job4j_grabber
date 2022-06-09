@@ -2,13 +2,13 @@ package ru.job4j.negativetemplatetwo;
 
 public class Cars {
 
-    private Oil oil;
+    private Mineral oil;
 
-    public Oil getOil() {
+    public Mineral getOil() {
         return oil;
     }
 
-    public void setOil(Oil oil) {
+    public void setOil(Mineral oil) {
         this.oil = oil;
     }
 }
