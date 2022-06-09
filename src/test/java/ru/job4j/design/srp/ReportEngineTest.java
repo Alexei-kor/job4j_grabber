@@ -125,7 +125,11 @@ public class ReportEngineTest {
         store.add(new Employee("Sidor", now, now, 300));
         Report engine = new ReportJSON(store);
         String strNow = new GsonBuilder().create().toJson(now);
-        String extend = String.format("[{\"name\":\"Ivan\",\"hired\":%s,\"fired\":%s,\"salary\":100.0},{\"name\":\"Petr\",\"hired\":%s,\"fired\":%s,\"salary\":200.0},{\"name\":\"Sidor\",\"hired\":%s,\"fired\":%s,\"salary\":300.0}]", strNow, strNow, strNow, strNow, strNow, strNow);
+        String extend = String.format("["
+                + "{\"name\":\"Ivan\",\"hired\":%s,\"fired\":%s,\"salary\":100.0},"
+                + "{\"name\":\"Petr\",\"hired\":%s,\"fired\":%s,\"salary\":200.0},"
+                + "{\"name\":\"Sidor\",\"hired\":%s,\"fired\":%s,\"salary\":300.0}"
+                + "]", strNow, strNow, strNow, strNow, strNow, strNow);
         assertThat(engine.generate(e -> true), is(extend));
     }
 
