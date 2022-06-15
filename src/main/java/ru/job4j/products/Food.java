@@ -1,11 +1,10 @@
 package ru.job4j.products;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Food {
 
-    private String Name;
+    private String name;
     private LocalDateTime expiryDate;
     private LocalDateTime createDate;
     private float price;
@@ -13,7 +12,7 @@ public class Food {
 
     public Food(String name, LocalDateTime expiryDate, LocalDateTime createDate,
                 float price, float discount) {
-        Name = name;
+        this.name = name;
         this.expiryDate = expiryDate;
         this.createDate = createDate;
         this.price = price;

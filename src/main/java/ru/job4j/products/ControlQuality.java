@@ -1,7 +1,6 @@
 package ru.job4j.products;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ControlQuality {
@@ -10,8 +9,8 @@ public class ControlQuality {
         Store rsl = null;
         LocalDateTime now = LocalDateTime.now();
         float percent = Math.round(
-                (float) Duration.between(food.getCreateDate(), now).toDays() /
-                        (float) Duration.between(food.getCreateDate(), food.getExpiryDate()).toDays()
+                (float) Duration.between(food.getCreateDate(), now).toDays()
+                        / (float) Duration.between(food.getCreateDate(), food.getExpiryDate()).toDays()
                         * 100);
         if (percent < 25) {
             rsl = new Warehouse();
