@@ -7,8 +7,8 @@ public class Food {
     private String name;
     private LocalDateTime expiryDate;
     private LocalDateTime createDate;
-    private float price;
-    private float discount;
+    private double price;
+    private double discount;
 
     public Food(String name, LocalDateTime expiryDate, LocalDateTime createDate,
                 float price, float discount) {
@@ -19,11 +19,15 @@ public class Food {
         this.discount = discount;
     }
 
-    public void setDiscount(float discount) {
-        this.discount = discount;
+    public double getPrice() {
+        return price;
     }
 
-    public float getDiscount() {
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
         return discount;
     }
 

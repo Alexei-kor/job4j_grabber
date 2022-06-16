@@ -1,27 +1,11 @@
 package ru.job4j.products;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class ControlQuality {
 
-    public Store distribute(Food food, LocalDateTime now) {
-        Store rsl = null;
-        float percent = Math.round(
-                (float) Duration.between(food.getCreateDate(), now).toDays()
-                        / (float) Duration.between(food.getCreateDate(), food.getExpiryDate()).toDays()
-                        * 100);
-        if (percent < 25) {
-            rsl = new Warehouse();
-        } else if (percent >= 25 && percent <= 75) {
-            rsl = new Shop();
-        } else if (percent > 75 && percent < 100) {
-            rsl = new Shop();
-            food.setDiscount(50);
-        } else {
-            rsl = new Trash();
-        }
-        return rsl;
+    public void distribute(Food food, List<Store> stores) {
+        stores.forEach(store -> store.add(food));
     }
 
 }
