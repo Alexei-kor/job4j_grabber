@@ -10,6 +10,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
 public class ControlQualityTest {
 
+    LocalDateTime now = LocalDateTime.of(2022, 6, 15, 0, 0);
+
     @Test
     public void whenPercentLess25ThenWarehouse() {
         Food food = new Food(
@@ -19,7 +21,7 @@ public class ControlQualityTest {
                 300,
                 0);
         ControlQuality control = new ControlQuality();
-        Store store = control.distribute(food);
+        Store store = control.distribute(food, now);
         assertThat(store.getClass(), is(Warehouse.class));
     }
 
@@ -32,7 +34,7 @@ public class ControlQualityTest {
                 300,
                 0);
         ControlQuality control = new ControlQuality();
-        Store store = control.distribute(food);
+        Store store = control.distribute(food, now);
         assertThat(store.getClass(), is(Shop.class));
     }
 
@@ -45,7 +47,7 @@ public class ControlQualityTest {
                 300,
                 0);
         ControlQuality control = new ControlQuality();
-        Store store = control.distribute(food);
+        Store store = control.distribute(food, now);
         assertTrue(food.getDiscount() != 0);
     }
 
@@ -58,7 +60,7 @@ public class ControlQualityTest {
                 300,
                 0);
         ControlQuality control = new ControlQuality();
-        Store store = control.distribute(food);
+        Store store = control.distribute(food, now);
         assertThat(store.getClass(), is(Trash.class));
     }
 

@@ -5,9 +5,8 @@ import java.time.LocalDateTime;
 
 public class ControlQuality {
 
-    public Store distribute(Food food) {
+    public Store distribute(Food food, LocalDateTime now) {
         Store rsl = null;
-        LocalDateTime now = LocalDateTime.now();
         float percent = Math.round(
                 (float) Duration.between(food.getCreateDate(), now).toDays()
                         / (float) Duration.between(food.getCreateDate(), food.getExpiryDate()).toDays()
