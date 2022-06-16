@@ -8,8 +8,8 @@ public abstract class Phone {
         this.owner = owner;
     }
 
-    public void foto() {
-        System.out.println("Сфотографировал");
+    public void call() {
+        System.out.println("Звонок выполнен");
     }
 
 }

@@ -4,12 +4,24 @@ import java.util.List;
 
 public class YoungHuman extends Humans {
 
+    int age;
+
     public YoungHuman(String name) {
         super(name);
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @Override
-    public boolean crossRoadOnRed() {
-        return true;
+    public void buyAlco() {
+        if (age < 18) {
+            System.out.println("Вам не продаем, нужно подрасти");
+        }
     }
 }

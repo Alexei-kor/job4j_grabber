@@ -10,15 +10,16 @@ public class Humans {
         this.name = name;
     }
 
-    public boolean crossRoadOnRed() {
-        return false;
+    public void buyAlco() {
+        System.out.println("Купил");
     }
 
     public static void main(String[] args) {
         Humans old = new OldHuman("Oleg");
-        System.out.println(old.crossRoadOnRed());
-        Humans young = new YoungHuman("Masha");
-        System.out.println(young.crossRoadOnRed());
+        old.buyAlco();
+        YoungHuman young = new YoungHuman("Masha");
+        young.setAge(16);
+        young.buyAlco();
     }
 
 }

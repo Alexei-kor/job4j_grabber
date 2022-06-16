@@ -10,9 +10,10 @@ public class Owner {
 
     public static void main(String[] args) {
         Owner owner = new Owner("Oleg");
-        Phone phone = new StaticPhone(owner);
-        if (phone.getClass() != StaticPhone.class) {
-            phone.foto();
-        }
+        Phone phoneS = new StaticPhone(owner);
+        phoneS.call();
+        MobilePhone phoneM = new MobilePhone(owner);
+        phoneM.setBatteryLevel(4);
+        phoneM.call();
     }
 }
