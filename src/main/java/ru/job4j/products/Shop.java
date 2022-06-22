@@ -14,7 +14,7 @@ public class Shop implements Store {
     }
 
     public List<Food> getFoods() {
-        return foods;
+        return new ArrayList<>(foods);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class Shop implements Store {
             foods.add(food);
             rsl = true;
         }
-        if (getPercentLifeExpired(food, LocalDateTime.now()) > 75) {
+        if (getPercentLifeExpired(food) > Constants.LIMIT_75) {
             food.setPrice(food.getPrice() - food.getDiscount());
         }
         return rsl;
@@ -32,7 +32,7 @@ public class Shop implements Store {
 
     @Override
     public boolean accept(Food food) {
-        int percent = getPercentLifeExpired(food, LocalDateTime.now());
-        return percent >= 25 && percent <= 100;
+        int percent = getPercentLifeExpired(food);
+        return percent >= Constants.LIMIT_25 && percent <= Constants.LIMIT_100;
     }
 }

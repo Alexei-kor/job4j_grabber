@@ -15,7 +15,7 @@ public class Warehouse implements Store {
     }
 
     public List<Food> getFoods() {
-        return foods;
+        return new ArrayList<>(foods);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class Warehouse implements Store {
 
     @Override
     public boolean accept(Food food) {
-        return getPercentLifeExpired(food, LocalDateTime.now()) < 25;
+        return getPercentLifeExpired(food) < Constants.LIMIT_25;
     }
 
 }

@@ -4,8 +4,18 @@ import java.util.List;
 
 public class ControlQuality {
 
-    public void distribute(Food food, List<Store> stores) {
-        stores.forEach(store -> store.add(food));
+    private List<Store> stores;
+
+    public ControlQuality(List<Store> stores) {
+        this.stores = stores;
+    }
+
+    public void distribute(Food food) {
+        stores.forEach(store -> {
+            if (store.accept(food)) {
+                store.add(food);
+            }
+        });
     }
 
 }
