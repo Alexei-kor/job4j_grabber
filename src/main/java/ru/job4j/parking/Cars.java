@@ -2,11 +2,10 @@ package ru.job4j.parking;
 
 public class Cars implements Autos {
 
-    private int size;
+    public final static int SIZE = 1;
     private String number;
 
-    public Cars(int size, String number) {
-        this.size = size;
+    public Cars(String number) {
         this.number = number;
     }
 }

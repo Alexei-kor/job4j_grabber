@@ -1,9 +1,11 @@
 package ru.job4j.parking;
 
+import java.util.List;
+
 public interface Parking {
 
-    boolean add(Autos autos);
+    boolean add(List<Autos> autos);
 
-    void delete(Autos autos);
+    boolean delete(Autos autos);
 
 }

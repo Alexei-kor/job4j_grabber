@@ -1,34 +1,41 @@
 package ru.job4j.parking;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Parking1 implements Parking {
 
-    private int height;
-    private int width;
-    private int free;
-    private int[][] store;
+    private int sizeStoreCar;
+    private int sizeStoreTruck;
+    private int freeStoreCar;
+    private int freeStoreTruck;
+    private List<Autos> storeCars;
+    private List<Autos> storeTrucks;
 
-    public Parking1(int height, int width) {
-        this.height = height;
-        this.width = width;
-        store = new int[width][height];
-        free = height * width;
-    }
-
-    public int getFree() {
-        return free;
-    }
-
-    @Override
-    public boolean add(Autos autos) {
-        return isSpace(autos);
+    public Parking1(int sizeStoreCar, int sizeStoreTruck) {
+        this.sizeStoreCar = sizeStoreCar;
+        this.sizeStoreTruck = sizeStoreTruck;
+        storeCars = new ArrayList<>(sizeStoreCar);
+        storeTrucks = new ArrayList<>(sizeStoreTruck);
+        freeStoreCar = sizeStoreCar;
+        freeStoreTruck = sizeStoreTruck;
     }
 
     @Override
-    public void delete(Autos autos) {
-
+    public boolean add(List<Autos> autos) {
+        boolean rsl = false;
+        if (isSpace(autos)) {
+            rsl = true;
+        }
+        return rsl;
     }
 
-    private boolean isSpace(Autos autos) {
+    @Override
+    public boolean delete(Autos autos) {
+        return true;
+    }
+
+    private boolean isSpace(List<Autos> autos) {
         return false;
     }
 
