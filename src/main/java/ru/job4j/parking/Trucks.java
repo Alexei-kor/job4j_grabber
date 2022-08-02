@@ -1,6 +1,6 @@
 package ru.job4j.parking;
 
-public class Trucks implements Autos {
+public class Trucks implements Auto {
 
     private int size;
     private String number;
@@ -11,8 +11,13 @@ public class Trucks implements Autos {
         this.number = number;
     }
 
+    @Override
+    public int getSize() {
+        return size;
+    }
+
     private void checkSize(int size) {
-        if (size <= 1) {
+        if (size <= Cars.SIZE) {
             throw new IllegalArgumentException("The size of the truck must be greater than 1");
         }
     }

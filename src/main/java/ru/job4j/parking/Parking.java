@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface Parking {
 
-    boolean add(List<Autos> autos);
+    boolean add(Auto auto);
 
-    boolean delete(Autos autos);
+    boolean delete(Auto auto);
 
 }
